@@ -51,7 +51,7 @@ Just add highlight. Anything else should be exactly the same as buitin put comma
 ### Highlight duration
 
 ```vim
-let g:highlightedput_highlight_duration = 1000  " default
+let g:highlightedput_highlight_duration = 500  " default
 ```
 
 ### Highlight group
