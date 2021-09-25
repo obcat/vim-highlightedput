@@ -1,0 +1,105 @@
+call themis#log('-----------------------------------------------------------')
+call themis#log(join(split(execute('version'), '\n')[: 2], "\n"))
+call themis#log('-----------------------------------------------------------')
+
+call themis#option('recursive', 1)
+call themis#option('reporter', 'spec')
+
+
+let g:assert = themis#helper('assert')
+
+
+nmap p <Plug>(highlightedput-p)
+xmap p <Plug>(highlightedput-p)
+nmap P <Plug>(highlightedput-P)
+xmap P <Plug>(highlightedput-P)
+nmap gp <Plug>(highlightedput-gp)
+xmap gp <Plug>(highlightedput-gp)
+nmap gP <Plug>(highlightedput-gP)
+xmap gP <Plug>(highlightedput-gP)
+nmap ]p <Plug>(highlightedput-]p)
+xmap ]p <Plug>(highlightedput-]p)
+nmap [P <Plug>(highlightedput-[P)
+xmap [P <Plug>(highlightedput-[P)
+nmap ]P <Plug>(highlightedput-]P)
+xmap ]P <Plug>(highlightedput-]P)
+nmap [p <Plug>(highlightedput-[p)
+xmap [p <Plug>(highlightedput-[p)
+nmap zp <Plug>(highlightedput-zp)
+xmap zp <Plug>(highlightedput-zp)
+nmap zP <Plug>(highlightedput-zP)
+xmap zP <Plug>(highlightedput-zP)
+
+let g:highlightedput_highlight_duration = -1
+
+
+function GetHighlightedPositionList() abort
+  let matches = getmatches()
+  call filter(matches, { _, match -> match.group ==# 'HighlightedputRegion' })
+  let _poslistlist = map(matches, { _, match
+        \ -> values(filter(match, { key -> key =~# '^pos[1-8]$' })) })
+  let poslist = []
+  for _poslist in _poslistlist
+    let poslist += _poslist
+  endfor
+  return poslist
+endfunction
+
+
+function DeleteAllRegisters() abort
+  " let regnames = [ {{{
+  let regnames = [
+        \   '"',
+        \   '0',
+        \   '1',
+        \   '2',
+        \   '3',
+        \   '4',
+        \   '5',
+        \   '6',
+        \   '7',
+        \   '8',
+        \   '9',
+        \   '-',
+        \   'a',
+        \   'b',
+        \   'c',
+        \   'd',
+        \   'e',
+        \   'f',
+        \   'g',
+        \   'h',
+        \   'i',
+        \   'j',
+        \   'k',
+        \   'l',
+        \   'm',
+        \   'n',
+        \   'o',
+        \   'p',
+        \   'q',
+        \   'r',
+        \   's',
+        \   't',
+        \   'u',
+        \   'v',
+        \   'w',
+        \   'x',
+        \   'y',
+        \   'z',
+        "\   ':',
+        "\   '.',
+        "\   '%',
+        \   '#',
+        \   '=',
+        \   '*',
+        \   '+',
+        "\   '~',
+        \   '_',
+        \   '/',
+        \ ]
+  " }}}
+  for regname in regnames
+    call setreg(regname, [])
+  endfor
+endfunction

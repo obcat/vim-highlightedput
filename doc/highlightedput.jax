@@ -1,0 +1,149 @@
+*highlightedput.jax*	貼り付けたテキストをハイライトする
+						Last change: 2021 Sep 26
+
+書いた人  : obcat <obcat@icloud.com>
+ライセンス: MIT License
+
+要件      : Vim 8.1.1084 かそれ以降のバージョン
+
+
+==============================================================================
+目次						*highlightedput-contents*
+
+はじめに		|highlightedput-introduction|
+使い方			|highlightedput-usage|
+インターフェイス	|highlightedput-interface|
+  キーマッピング	  |highlightedput-key-mappings|
+カスタマイズ		|highlightedput-customizing|
+  変数			  |highlightedput-variables|
+  ハイライトグループ	  |highlightedput-highlight-groups|
+
+
+==============================================================================
+はじめに					*highlightedput-introduction*
+
+*highlightedput.vim* は貼り付けたテキストをハイライトするためのプラグインです。
+
+
+==============================================================================
+使い方							*highlightedput-usage*
+
+以下の設定を |vimrc| に書いてください:
+>
+	nmap p <Plug>(highlightedput-p)
+	xmap p <Plug>(highlightedput-p)
+	nmap P <Plug>(highlightedput-P)
+	xmap P <Plug>(highlightedput-P)
+	nmap gp <Plug>(highlightedput-gp)
+	xmap gp <Plug>(highlightedput-gp)
+	nmap gP <Plug>(highlightedput-gP)
+	xmap gP <Plug>(highlightedput-gP)
+	nmap ]p <Plug>(highlightedput-]p)
+	xmap ]p <Plug>(highlightedput-]p)
+	nmap [P <Plug>(highlightedput-[P)
+	xmap [P <Plug>(highlightedput-[P)
+	nmap ]P <Plug>(highlightedput-]P)
+	xmap ]P <Plug>(highlightedput-]P)
+	nmap [p <Plug>(highlightedput-[p)
+	xmap [p <Plug>(highlightedput-[p)
+	nmap zp <Plug>(highlightedput-zp)
+	xmap zp <Plug>(highlightedput-zp)
+	nmap zP <Plug>(highlightedput-zP)
+	xmap zP <Plug>(highlightedput-zP)
+<
+`zp` と `zP` は Vim 8.2.2914 かそれ以降のバージョンでのみ動作しますので、次の
+ようなチェックをいれておくと安心かもしれません:
+>
+	if has('patch-8.2.2914')
+	  nmap zp <Plug>(highlightedput-zp)
+	  xmap zp <Plug>(highlightedput-zp)
+	  nmap zP <Plug>(highlightedput-zP)
+	  xmap zP <Plug>(highlightedput-zP)
+	endif
+<
+
+これで準備完了です。
+
+さっそく `p` や `P` でテキストを貼り付けてみてください。貼り付けたテキストがピ
+カッと光ることでしょう!
+
+ - ハイライトはドットコマンド (|.|) で貼り付けをリピートしたときにも行われます。
+ - ハイライトの色や持続時間はカスタマイズ可能です。詳しくは
+   |highlightedput-customizing| をご覧ください。
+
+
+==============================================================================
+インターフェイス				*highlightedput-interface*
+
+------------------------------------------------------------------------------
+キーマッピング					*highlightedput-key-mappings*
+
+<Plug>(highlightedput-p)			*<Plug>(highlightedput-p)*
+<Plug>(highlightedput-P)			*<Plug>(highlightedput-P)*
+<Plug>(highlightedput-gp)			*<Plug>(highlightedput-gp)*
+<Plug>(highlightedput-gP)			*<Plug>(highlightedput-gP)*
+<Plug>(highlightedput-]p)			*<Plug>(highlightedput-]p)*
+<Plug>(highlightedput-[P)			*<Plug>(highlightedput-[P)*
+<Plug>(highlightedput-]P)			*<Plug>(highlightedput-]P)*
+<Plug>(highlightedput-[p)			*<Plug>(highlightedput-[p)*
+<Plug>(highlightedput-zp)			*<Plug>(highlightedput-zp)*
+<Plug>(highlightedput-zP)			*<Plug>(highlightedput-zP)*
+
+	それぞれ |p|, |P|, |gp|, |gP|, |]p|, |[P|, |]P|, |[p|, |zp|, |zP| と同
+	様ですが、貼り付けたテキストがハイライトされます。これらの組み込みコマ
+	ンドと同様に、ノーマルモードとビジュアルモードでのみ使用可能です。
+
+
+==============================================================================
+カスタマイズ					*highlightedput-customizing*
+
+------------------------------------------------------------------------------
+変数						*highlightedput-variables*
+
+g:highlightedput_highlight_duration	*g:highlightedput_highlight_duration*
+	ハイライトの持続時間を指定します。単位はミリ秒です。デフォルト:
+>
+		let g:highlightedput_highlight_duration = 500
+<
+	負の数が与えられるとハイライトは時間によって消えなくなります:
+>
+		let g:highlightedput_highlight_duration = -1
+<
+	ただし、いずれの場合もバッファに変更が加えられたり挿入モードが開始され
+	たりするとハイライトはただちに消去されます。これはハイライト位置がずれ
+	るのを防ぐためです。
+
+g:highlightedput_highlight_priority	*g:highlightedput_highlight_priority*
+	ハイライトの優先度を指定します。デフォルト:
+>
+		let g:highlightedput_highlight_priority = 10
+<
+	これはマッチ (|match-highlight|) としての優先度です。ハイライトがオプ
+	ション 'hlsearch' によるハイライト (優先度 0) や、マッチを利用する他の
+	プラグイン (例えば |matchparen|。優先度 10) のハイライトを意図せず上書
+	きしてしまったり、逆に上書きされてしまう場合に調整するとよいでしょう。
+	Note: 負の数も指定できます。
+
+g:highlightedput_highlight_maxheight	*g:highlightedput_highlight_maxheight*
+	貼り付けたテキストの行数がこの変数の値より大きい場合、ハイライトされな
+	くなります。デフォルト:
+>
+		let g:highlightedput_highlight_maxheight = 10000
+<
+	これは多くの行を貼り付けたときにハイライト処理が遅くなるのを避けるのに
+	役に立ちます。負の数は無制限を意味します。
+
+
+------------------------------------------------------------------------------
+ハイライトグループ			*highlightedput-highlight-groups*
+
+HighlightedputRegion				*hl-HighlightedputRegion*
+	貼り付けたテキストのハイライトの色を定義するグループです。デフォルトで
+	は DiffAdd (|hl-DiffAdd|) にリンクされています:
+>
+		highlight default link HighlightedputRegion DiffAdd
+<
+
+
+==============================================================================
+vim:tw=78:ts=8:noet:ft=help:norl:

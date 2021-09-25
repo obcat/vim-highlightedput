@@ -1,0 +1,149 @@
+*highlightedput.txt*	Highlight the put text
+						Last change: 2021 Sep 25
+
+Author : obcat <obcat@icloud.com>
+License: MIT License
+
+Requirements: Vim 8.1.1084 or later
+
+
+==============================================================================
+CONTENTS					*highlightedput-contents*
+
+INTRODUCTION		|highlightedput-introduction|
+USAGE				|highlightedput-usage|
+INTERFACE		|highlightedput-interface|
+  KEY MAPPINGS			|highlightedput-key-mappings|
+CUSTOMIZING		|highlightedput-customizing|
+  VARIABLES			|highlightedput-variables|
+  HIGHLIGHT GROUPS		|highlightedput-highlight-groups|
+
+
+==============================================================================
+INTRODUCTION					*highlightedput-introduction*
+
+*highlightedput.vim* is a plugin to highlight the put text.
+
+
+==============================================================================
+USAGE							*highlightedput-usage*
+
+Write these lines in your |vimrc|:
+>
+	nmap p <Plug>(highlightedput-p)
+	xmap p <Plug>(highlightedput-p)
+	nmap P <Plug>(highlightedput-P)
+	xmap P <Plug>(highlightedput-P)
+	nmap gp <Plug>(highlightedput-gp)
+	xmap gp <Plug>(highlightedput-gp)
+	nmap gP <Plug>(highlightedput-gP)
+	xmap gP <Plug>(highlightedput-gP)
+	nmap ]p <Plug>(highlightedput-]p)
+	xmap ]p <Plug>(highlightedput-]p)
+	nmap [P <Plug>(highlightedput-[P)
+	xmap [P <Plug>(highlightedput-[P)
+	nmap ]P <Plug>(highlightedput-]P)
+	xmap ]P <Plug>(highlightedput-]P)
+	nmap [p <Plug>(highlightedput-[p)
+	xmap [p <Plug>(highlightedput-[p)
+	nmap zp <Plug>(highlightedput-zp)
+	xmap zp <Plug>(highlightedput-zp)
+	nmap zP <Plug>(highlightedput-zP)
+	xmap zP <Plug>(highlightedput-zP)
+<
+`zp` and `zP` only work in Vim 8.2.2914 or later, so you may want to add a
+check like this:
+>
+	if has('patch-8.2.2914')
+	  nmap zp <Plug>(highlightedput-zp)
+	  xmap zp <Plug>(highlightedput-zp)
+	  nmap zP <Plug>(highlightedput-zP)
+	  xmap zP <Plug>(highlightedput-zP)
+	endif
+<
+
+That's it for the setup!
+
+Let's put a text with one of the put commands.  The put text will be
+highlighted!
+
+ - The highlighting is also done when repeating a put command with the dot
+   command (|.|).
+ - You can customize the color of the highlighting, the highlighting duration,
+   or etc.  See |highlightedput-customizing|.
+
+
+==============================================================================
+INTERFACE					*highlightedput-interface*
+
+------------------------------------------------------------------------------
+KEY MAPPINGS					*highlightedput-key-mappings*
+
+<Plug>(highlightedput-p)			*<Plug>(highlightedput-p)*
+<Plug>(highlightedput-P)			*<Plug>(highlightedput-P)*
+<Plug>(highlightedput-gp)			*<Plug>(highlightedput-gp)*
+<Plug>(highlightedput-gP)			*<Plug>(highlightedput-gP)*
+<Plug>(highlightedput-]p)			*<Plug>(highlightedput-]p)*
+<Plug>(highlightedput-[P)			*<Plug>(highlightedput-[P)*
+<Plug>(highlightedput-]P)			*<Plug>(highlightedput-]P)*
+<Plug>(highlightedput-[p)			*<Plug>(highlightedput-[p)*
+<Plug>(highlightedput-zp)			*<Plug>(highlightedput-zp)*
+<Plug>(highlightedput-zP)			*<Plug>(highlightedput-zP)*
+
+	Like |p|, |P|, |gp|, |gP|, |]p|, |[P|, |]P|, |[p|, |zp|, |zP|
+	respectively, but the put text is highlighted.  Only avairable in
+	|Normal-mode| and |Visual-mode| like with these builtin commands.
+
+
+==============================================================================
+CUSTOMIZING					*highlightedput-customizing*
+
+------------------------------------------------------------------------------
+VARIABLES					*highlightedput-variables*
+
+g:highlightedput_highlight_duration	*g:highlightedput_highlight_duration*
+	The highlighting duration in millisecond.  Default:
+>
+		let g:highlightedput_highlight_duration = 500
+<
+	If a negative number is given, the highlight gets persistent:
+>
+		let g:highlightedput_highlight_duration = -1
+<
+	Note that when a change was made to the buffer or Insert mode is
+	started, the highlight will be deleted immediately.
+
+g:highlightedput_highlight_priority	*g:highlightedput_highlight_priority*
+	The highlight priority.  Default:
+>
+		let g:highlightedput_highlight_priority = 10
+<
+	This is a priority as a match (|match-highlight|).  You may want to
+	adjust this if the highlight unintentionally overrides the 'hlsearch'
+	highlight (priority 0) or a highlight added by another plugin (e.g.
+	|matchparen|, priority 10), or vice versa.
+	Note: A negative number can also be specified.
+
+g:highlightedput_highlight_maxheight	*g:highlightedput_highlight_maxheight*
+	The maximum height of the highlight. Default:
+>
+		let g:highlightedput_highlight_maxheight = 10000
+<
+	No highlighting will be performed if the number of the put text lines
+	is greater than this value.  This helps to avoid slow highlighting
+	process when many lines are put.  A negative number means limitless.
+
+
+------------------------------------------------------------------------------
+HIGHLIGHT GROUPS			*highlightedput-highlight-groups*
+
+HighlightedputRegion				*hl-HighlightedputRegion*
+	Defines the color of the put text. Linked to DiffAdd (|hl-DiffAdd|) by
+	default:
+>
+		highlight default link HighlightedputRegion DiffAdd
+<
+
+
+==============================================================================
+vim:tw=78:ts=8:noet:ft=help:norl:
