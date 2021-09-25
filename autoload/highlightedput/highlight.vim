@@ -123,7 +123,7 @@ endfunction
 
 
 function s:default_highlight() abort
-  highlight default link HighlightedputRegion DiffChange
+  highlight default link HighlightedputRegion DiffAdd
 endfunction
 call s:default_highlight()
 
