@@ -34,19 +34,24 @@ function highlightedput#put_and_highlight(motion_wise) abort
 
 
   " Put the text.
-  let error = 0
-  if s:is_Normal(mode)
-    let error = s:put(regname, l:count, put_cmd)
-  elseif s:is_Visual(mode)
-    if invoked_by_dot
-      let error = s:delete_range(motion_wise, motion_range)
-    else
-      normal! gv
+  let lazyredraw = &lazyredraw
+  set nolazyredraw
+  try
+    if s:is_Normal(mode)
       let error = s:put(regname, l:count, put_cmd)
+    elseif s:is_Visual(mode)
+      if invoked_by_dot
+        let error = s:delete_range(motion_wise, motion_range)
+      else
+        normal! gv
+        let error = s:put(regname, l:count, put_cmd)
+      endif
+    else
+      throw 'highlightedput: Unexpected mode:' mode
     endif
-  else
-    throw 'highlightedput: Unexpected mode:' mode
-  endif
+  finally
+    let &lazyredraw = lazyredraw
+  endtry
 
   " Fix cursor position.
   " FIXME: Maybe wrong way.  FIXME: Consider dot repeat.
