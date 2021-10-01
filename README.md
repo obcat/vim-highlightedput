@@ -35,6 +35,8 @@ nmap [p <Plug>(highlightedput-[p)
 xmap [p <Plug>(highlightedput-[p)
 nmap zp <Plug>(highlightedput-zp)
 xmap zp <Plug>(highlightedput-zp)
+nmap zP <Plug>(highlightedput-zP)
+xmap zP <Plug>(highlightedput-zP)
 ```
 
 
