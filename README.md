@@ -67,7 +67,7 @@ highlight link HighlightedputRegion DiffAdd  " default
 
 Thanks to @tm9d for creating [atom-vim-mode-plus](https://github.com/t9md/atom-vim-mode-plus). The project told me that the put operation with highlight is so exciting and inspired me to write this plugin.
 
-Also thanks to @machakann for creating [vim-highlightedyank](https://github.com/machakann/vim-highlightedyank) and [vim-highlightedundo](https://github.com/machakann/vim-highlightedundo) plugin. The name "vim-highlightgedput" is inspired by the plugins, and the author kindly agreed to let me use this name. Also a lot of code is based on the plugins, thank you.
+Also thanks to @machakann for creating [vim-highlightedyank](https://github.com/machakann/vim-highlightedyank) and [vim-highlightedundo](https://github.com/machakann/vim-highlightedundo) plugin. The name "vim-highlightgedput" is inspired by the plugins, and he kindly agreed to let me use this name. Also a lot of code is based on the plugins, thank you.
 
 
 ## License
