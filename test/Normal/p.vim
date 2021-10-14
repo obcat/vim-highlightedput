@@ -15,40 +15,55 @@ endfunction
 
 
 function s:suite.char()
-  call setline('.', ['#'])
-  call setreg('', ['foo'], 'c')
+  call setline(1, ['##'])
+  setlocal nomodified
+  call setreg('', [''], 'c')
   normal 3p
-  call g:assert.equals(getline(1, '$'), ['#foofoofoo'])
+  call g:assert.equals(getline(1, '$'), ['##'])
+  call g:assert.true(&l:modified)
+  sleep 1m
+  call g:assert.equals(GetHighlightedPositionList(), [])
+  % bwipeout!
+
+  call setline(1, ['##'])
+  call setreg('', ['txt'], 'c')
+  normal 3p
+  call g:assert.equals(getline(1, '$'), ['#txttxttxt#'])
   sleep 1m
   call g:assert.equals(GetHighlightedPositionList(), [[1, 2, 9]])
   % bwipeout!
 
-  call setline('.', ['#'])
-  call setreg('', ['foo', 'bar'], 'c')
+  call setline(1, ['##'])
+  call setreg('', [
+        \   'txt',
+        \   '',
+        \ ], 'c')
   normal 3p
   call g:assert.equals(getline(1, '$'), [
-        \   '#foo',
-        \   'barfoo',
-        \   'barfoo',
-        \   'bar',
+        \   '#txt',
+        \   'txt',
+        \   'txt',
+        \   '#',
         \ ])
   sleep 1m
   call g:assert.equals(GetHighlightedPositionList(), [
         \   [1, 2, 4],
-        \   [2, 1, 7],
-        \   [3, 1, 7],
-        \   [4, 1, 3],
+        \   [2, 1, 4],
+        \   [3, 1, 4],
         \ ])
   % bwipeout!
 
-  call setline('.', ['#'])
-  call setreg('', ['', 'foo'], 'c')
+  call setline(1, ['##'])
+  call setreg('', [
+        \   '',
+        \   'txt',
+        \ ], 'c')
   normal 3p
   call g:assert.equals(getline(1, '$'), [
         \   '#',
-        \   'foo',
-        \   'foo',
-        \   'foo',
+        \   'txt',
+        \   'txt',
+        \   'txt#',
         \ ])
   sleep 1m
   call g:assert.equals(GetHighlightedPositionList(), [
@@ -59,20 +74,98 @@ function s:suite.char()
         \ ])
   % bwipeout!
 
-  call setline('.', ['#'])
-  call setreg('', ['foo', ''], 'c')
+  call setline(1, ['##'])
+  call setreg('', [
+        \   'txt',
+        \   'Nadim',
+        \ ], 'c')
   normal 3p
   call g:assert.equals(getline(1, '$'), [
-        \   '#foo',
-        \   'foo',
-        \   'foo',
-        \   '',
+        \   '#txt',
+        \   'Nadimtxt',
+        \   'Nadimtxt',
+        \   'Nadim#',
         \ ])
   sleep 1m
   call g:assert.equals(GetHighlightedPositionList(), [
         \   [1, 2, 4],
-        \   [2, 1, 4],
-        \   [3, 1, 4],
+        \   [2, 1, 9],
+        \   [3, 1, 9],
+        \   [4, 1, 5],
+        \ ])
+  % bwipeout!
+
+  call setline(1, ['##'])
+  call setreg('', [
+        \   'version',
+        \   'Bidirectional',
+        \   'Nadim',
+        \   'txt',
+        \   'arabicshape',
+        \ ], 'c')
+  normal 7p
+  call g:assert.equals(getline(1, '$'), [
+        \   '#version',
+        \   'Bidirectional',
+        \   'Nadim',
+        \   'txt',
+        \   'arabicshapeversion',
+        \   'Bidirectional',
+        \   'Nadim',
+        \   'txt',
+        \   'arabicshapeversion',
+        \   'Bidirectional',
+        \   'Nadim',
+        \   'txt',
+        \   'arabicshapeversion',
+        \   'Bidirectional',
+        \   'Nadim',
+        \   'txt',
+        \   'arabicshapeversion',
+        \   'Bidirectional',
+        \   'Nadim',
+        \   'txt',
+        \   'arabicshapeversion',
+        \   'Bidirectional',
+        \   'Nadim',
+        \   'txt',
+        \   'arabicshapeversion',
+        \   'Bidirectional',
+        \   'Nadim',
+        \   'txt',
+        \   'arabicshape#',
+        \ ])
+  sleep 1m
+  call g:assert.equals(GetHighlightedPositionList(), [
+        \   [1, 2, 8],
+        \   [2, 1, 14],
+        \   [3, 1, 6],
+        \   [4, 1, 4],
+        \   [5, 1, 19],
+        \   [6, 1, 14],
+        \   [7, 1, 6],
+        \   [8, 1, 4],
+        \   [9, 1, 19],
+        \   [10, 1, 14],
+        \   [11, 1, 6],
+        \   [12, 1, 4],
+        \   [13, 1, 19],
+        \   [14, 1, 14],
+        \   [15, 1, 6],
+        \   [16, 1, 4],
+        \   [17, 1, 19],
+        \   [18, 1, 14],
+        \   [19, 1, 6],
+        \   [20, 1, 4],
+        \   [21, 1, 19],
+        \   [22, 1, 14],
+        \   [23, 1, 6],
+        \   [24, 1, 4],
+        \   [25, 1, 19],
+        \   [26, 1, 14],
+        \   [27, 1, 6],
+        \   [28, 1, 4],
+        \   [29, 1, 11],
         \ ])
   % bwipeout!
 endfunction
@@ -80,33 +173,45 @@ endfunction
 
 
 function s:suite.line()
-  call setline('.', [''])
-  call setreg('', ['foo'], 'l')
+  call setline(1, [
+        \   '#',
+        \   '#',
+        \ ])
+  call setreg('', ['txt'], 'l')
   normal 3p
   call g:assert.equals(getline(1, '$'), [
-        \   '',
-        \   'foo',
-        \   'foo',
-        \   'foo',
+        \   '#',
+        \   'txt',
+        \   'txt',
+        \   'txt',
+        \   '#',
         \ ])
   sleep 1m
-  call g:assert.equals(GetHighlightedPositionList(), [[2], [3], [4]])
+  call g:assert.equals(GetHighlightedPositionList(), [
+        \   [2],
+        \   [3],
+        \   [4],
+        \ ])
 endfunction
 
 
 
 function s:suite.block()
-  call setline('.', [
+  call setline(1, [
         \   '',
         \   '',
         \   '',
         \ ])
-  call setreg('', ['a', 'ab', 'abc'], 'b')
+  call setreg('', [
+        \   '8',
+        \   '22',
+        \   'txt',
+        \ ], 'b')
   normal 3p
   call g:assert.equals(getline(1, '$'), [
-        \   'a  a  a',
-        \   'ab ab ab',
-        \   'abcabcabc',
+        \   '8  8  8',
+        \   '22 22 22',
+        \   'txttxttxt',
         \ ])
   sleep 1m
   call g:assert.equals(GetHighlightedPositionList(), [
@@ -116,17 +221,21 @@ function s:suite.block()
        \ ])
   % bwipeout!
 
-  call setline('.', [
+  call setline(1, [
         \   '#',
         \   '#',
         \   '#',
         \ ])
-  call setreg('', ['a', 'ab', 'abc'], 'b')
+  call setreg('', [
+        \   '8',
+        \   '22',
+        \   'txt',
+        \ ], 'b')
   normal 3p
   call g:assert.equals(getline(1, '$'), [
-        \   '#a  a  a',
-        \   '#ab ab ab',
-        \   '#abcabcabc',
+        \   '#8  8  8',
+        \   '#22 22 22',
+        \   '#txttxttxt',
         \ ])
   sleep 1m
   call g:assert.equals(GetHighlightedPositionList(), [
@@ -136,17 +245,21 @@ function s:suite.block()
        \ ])
   % bwipeout!
 
-  call setline('.', [
+  call setline(1, [
         \   '##',
         \   '##',
         \   '##',
         \ ])
-  call setreg('', ['a', 'ab', 'abc'], 'b')
+  call setreg('', [
+        \   '8',
+        \   '22',
+        \   'txt',
+        \ ], 'b')
   normal 3p
   call g:assert.equals(getline(1, '$'), [
-        \   '#a  a  a  #',
-        \   '#ab ab ab #',
-        \   '#abcabcabc#',
+        \   '#8  8  8  #',
+        \   '#22 22 22 #',
+        \   '#txttxttxt#',
         \ ])
   sleep 1m
   call g:assert.equals(GetHighlightedPositionList(), [
@@ -156,17 +269,21 @@ function s:suite.block()
        \ ])
   % bwipeout!
 
-  call setline('.', [
+  call setline(1, [
         \   '',
         \   '',
         \   '',
         \ ])
-  call setreg('', ['', 'a', 'ab'], 'b')
+  call setreg('', [
+        \   '',
+        \   '8',
+        \   '22',
+        \ ], 'b')
   normal p
   call g:assert.equals(getline(1, '$'), [
         \   '',
-        \   'a',
-        \   'ab',
+        \   '8',
+        \   '22',
         \ ])
   sleep 1m
   call g:assert.equals(GetHighlightedPositionList(), [
@@ -175,17 +292,21 @@ function s:suite.block()
        \ ])
   % bwipeout!
 
-  call setline('.', [
+  call setline(1, [
         \   '#',
         \   '#',
         \   '#',
         \ ])
-  call setreg('', ['', 'a', 'ab'], 'b')
+  call setreg('', [
+        \   '',
+        \   '8',
+        \   '22',
+        \ ], 'b')
   normal p
   call g:assert.equals(getline(1, '$'), [
         \   '#',
-        \   '#a',
-        \   '#ab',
+        \   '#8',
+        \   '#22',
         \ ])
   sleep 1m
   call g:assert.equals(GetHighlightedPositionList(), [
@@ -194,17 +315,21 @@ function s:suite.block()
        \ ])
   % bwipeout!
 
-  call setline('.', [
+  call setline(1, [
         \   '##',
         \   '##',
         \   '##',
         \ ])
-  call setreg('', ['', 'a', 'ab'], 'b')
+  call setreg('', [
+        \   '',
+        \   '8',
+        \   '22',
+        \ ], 'b')
   normal p
   call g:assert.equals(getline(1, '$'), [
         \   '#  #',
-        \   '#a #',
-        \   '#ab#',
+        \   '#8 #',
+        \   '#22#',
         \ ])
   sleep 1m
   call g:assert.equals(GetHighlightedPositionList(), [
@@ -217,74 +342,88 @@ endfunction
 
 
 function s:suite.dot_repeat_line()
-  call setline('.', '')
-  call setreg('', ['foo'], 'l')
+  call setline(1, [
+        \   '#',
+        \   '#',
+        \ ])
+  call setreg('', ['txt'], 'l')
   normal 2p
   call g:assert.equals(getline(1, '$'), [
-        \   '',
-        \   'foo',
-        \   'foo',
+        \   '#',
+        \   'txt',
+        \   'txt',
+        \   '#',
         \ ])
   sleep 1m
-  call g:assert.equals(GetHighlightedPositionList(), [[2], [3]])
-  normal! G
+  call g:assert.equals(GetHighlightedPositionList(), [
+        \   [2],
+        \   [3],
+        \ ])
   normal! .
   call g:assert.equals(getline(1, '$'), [
-        \   '',
-        \   'foo',
-        \   'foo',
-        \   'foo',
-        \   'foo',
+        \   '#',
+        \   'txt',
+        \   'txt',
+        \   'txt',
+        \   'txt',
+        \   '#',
         \ ])
   sleep 1m
-  call g:assert.equals(GetHighlightedPositionList(), [[4], [5]])
-  normal! G
+  call g:assert.equals(GetHighlightedPositionList(), [
+        \   [3],
+        \   [4],
+        \ ])
   normal! 3.
   call g:assert.equals(getline(1, '$'), [
-        \   '',
-        \   'foo',
-        \   'foo',
-        \   'foo',
-        \   'foo',
-        \   'foo',
-        \   'foo',
-        \   'foo',
+        \   '#',
+        \   'txt',
+        \   'txt',
+        \   'txt',
+        \   'txt',
+        \   'txt',
+        \   'txt',
+        \   'txt',
+        \   '#',
         \ ])
   sleep 1m
-  call g:assert.equals(GetHighlightedPositionList(), [[6], [7], [8]])
-  normal! G
+  call g:assert.equals(GetHighlightedPositionList(), [
+        \   [4],
+        \   [5],
+        \   [6],
+        \ ])
   normal! .
   call g:assert.equals(getline(1, '$'), [
-        \   '',
-        \   'foo',
-        \   'foo',
-        \   'foo',
-        \   'foo',
-        \   'foo',
-        \   'foo',
-        \   'foo',
-        \   'foo',
-        \   'foo',
-        \   'foo',
+        \   '#',
+        \   'txt',
+        \   'txt',
+        \   'txt',
+        \   'txt',
+        \   'txt',
+        \   'txt',
+        \   'txt',
+        \   'txt',
+        \   'txt',
+        \   'txt',
+        \   '#',
         \ ])
   sleep 1m
-  call g:assert.equals(GetHighlightedPositionList(), [[9], [10], [11]])
+  call g:assert.equals(GetHighlightedPositionList(), [
+        \   [5],
+        \   [6],
+        \   [7],
+        \ ])
 endfunction
 
 
 
 function s:suite.register()
-  call setline('.', '#')
-  call setreg('a', ['foo'], 'c')
-  normal "a3p
-  call g:assert.equals(getline(1, '$'), ['#foofoofoo'])
-  sleep 1m
-  call g:assert.equals(GetHighlightedPositionList(), [[1, 2, 9]])
+  call setline(1, ['##'])
+  call setreg('a', ['txt'], 'c')
+  normal "ap
+  call g:assert.equals(getline(1, '$'), ['#txt#'])
   % bwipeout!
 
-  call setline('.', '#')
-  execute "normal \"='bar'\<CR>3p"
-  call g:assert.equals(getline(1, '$'), ['#barbarbar'])
-  sleep 1m
-  call g:assert.equals(GetHighlightedPositionList(), [[1, 2, 9]])
+  call setline(1, ['##'])
+  execute "normal \"='Nadim'\<CR>p"
+  call g:assert.equals(getline(1, '$'), ['#Nadim#'])
 endfunction

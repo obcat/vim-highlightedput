@@ -18,17 +18,21 @@ function s:suite.block()
     call g:assert.skip('skiped')
   endif
 
-  call setline('.', [
+  call setline(1, [
         \   '',
         \   '',
         \   '',
         \ ])
-  call setreg('', ['a', 'ab', 'abc'], 'b')
+  call setreg('', [
+        \  '8',
+        \  '22',
+        \  'txt',
+        \ ], 'b')
   normal 3zp
   call g:assert.equals(getline(1, '$'), [
-        \   'aaa',
-        \   'ababab',
-        \   'abcabcabc',
+        \   '888',
+        \   '222222',
+        \   'txttxttxt',
         \ ])
   sleep 1m
   call g:assert.equals(GetHighlightedPositionList(), [
@@ -38,17 +42,21 @@ function s:suite.block()
         \ ])
   % bwipeout!
 
-  call setline('.', [
+  call setline(1, [
         \   '#',
         \   '#',
         \   '#',
         \ ])
-  call setreg('', ['a', 'ab', 'abc'], 'b')
+  call setreg('', [
+        \  '8',
+        \  '22',
+        \  'txt',
+        \ ], 'b')
   normal 3zp
   call g:assert.equals(getline(1, '$'), [
-        \   '#aaa',
-        \   '#ababab',
-        \   '#abcabcabc',
+        \   '#888',
+        \   '#222222',
+        \   '#txttxttxt',
         \ ])
   sleep 1m
   call g:assert.equals(GetHighlightedPositionList(), [
@@ -58,17 +66,21 @@ function s:suite.block()
         \ ])
   % bwipeout!
 
-  call setline('.', [
+  call setline(1, [
         \   '##',
         \   '##',
         \   '##',
         \ ])
-  call setreg('', ['a', 'ab', 'abc'], 'b')
+  call setreg('', [
+        \  '8',
+        \  '22',
+        \  'txt',
+        \ ], 'b')
   normal 3zp
   call g:assert.equals(getline(1, '$'), [
-        \   '#aaa#',
-        \   '#ababab#',
-        \   '#abcabcabc#',
+        \   '#888#',
+        \   '#222222#',
+        \   '#txttxttxt#',
         \ ])
   sleep 1m
   call g:assert.equals(GetHighlightedPositionList(), [
@@ -78,17 +90,21 @@ function s:suite.block()
         \ ])
   % bwipeout!
 
-  call setline('.', [
+  call setline(1, [
         \   '',
         \   '',
         \   '',
         \ ])
-  call setreg('', ['', 'a', 'ab'], 'b')
+  call setreg('', [
+        \  '',
+        \  '8',
+        \  '22',
+        \ ], 'b')
   normal zp
   call g:assert.equals(getline(1, '$'), [
         \   '',
-        \   'a',
-        \   'ab',
+        \   '8',
+        \   '22',
         \ ])
   sleep 1m
   call g:assert.equals(GetHighlightedPositionList(), [
@@ -97,17 +113,21 @@ function s:suite.block()
         \ ])
   % bwipeout!
 
-  call setline('.', [
+  call setline(1, [
         \   '#',
         \   '#',
         \   '#',
         \ ])
-  call setreg('', ['', 'a', 'ab'], 'b')
+  call setreg('', [
+        \  '',
+        \  '8',
+        \  '22',
+        \ ], 'b')
   normal zp
   call g:assert.equals(getline(1, '$'), [
         \   '#',
-        \   '#a',
-        \   '#ab',
+        \   '#8',
+        \   '#22',
         \ ])
   sleep 1m
   call g:assert.equals(GetHighlightedPositionList(), [
@@ -116,17 +136,21 @@ function s:suite.block()
         \ ])
   % bwipeout!
 
-  call setline('.', [
+  call setline(1, [
         \   '##',
         \   '##',
         \   '##',
         \ ])
-  call setreg('', ['', 'a', 'ab'], 'b')
+  call setreg('', [
+        \  '',
+        \  '8',
+        \  '22',
+        \ ], 'b')
   normal zp
   call g:assert.equals(getline(1, '$'), [
         \   '##',
-        \   '#a#',
-        \   '#ab#',
+        \   '#8#',
+        \   '#22#',
         \ ])
   sleep 1m
   call g:assert.equals(GetHighlightedPositionList(), [

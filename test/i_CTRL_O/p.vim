@@ -14,17 +14,17 @@ endfunction
 
 
 function s:suite.char()
-  call setline('.', ['#'])
-  call setreg('', ['foo'], 'c')
+  call setline(1, ['##'])
+  call setreg('', ['txt'], 'c')
   execute "normal i\<C-o>3p"
-  call g:assert.equals(getline(1, '$'), ['#foofoofoo'])
+  call g:assert.equals(getline(1, '$'), ['#txttxttxt#'])
   sleep 1m
   call g:assert.equals(GetHighlightedPositionList(), [[1, 2, 9]])
   % bwipeout!
 
   " Check cursor position.
-  call setline('.', ['#'])
-  call setreg('', ['foo'], 'c')
+  call setline(1, ['##'])
+  call setreg('', ['txt'], 'c')
   execute "normal i\<C-o>3p@"
-  call g:assert.equals(getline(1, '$'), ['#foofoofoo@'])
+  call g:assert.equals(getline(1, '$'), ['#txttxttxt@#'])
 endfunction

@@ -15,110 +15,163 @@ endfunction
 
 
 function s:suite.char()
-  call setline('.', ['foo'])
-  call setreg('', ['bar'], 'c')
-  normal viw3p
-  call g:assert.equals(getline(1, '$'), ['barbarbar'])
+  call setline(1, ['txt'])
+  call setreg('', ['Nadim'], 'c')
+  normal! viw
+  normal 3p
+  call g:assert.equals(getline(1, '$'), ['NadimNadimNadim'])
   sleep 1m
-  call g:assert.equals(GetHighlightedPositionList(), [[1, 1, 9]])
-  call g:assert.equals(getreg('', 1, 1), ['foo'])
+  call g:assert.equals(GetHighlightedPositionList(), [[1, 1, 15]])
+  call g:assert.equals(getreg('', 1, 1), ['txt'])
   call g:assert.equals(getregtype(''), 'v')
 endfunction
 
 
 function s:suite.line()
-  call setline('.', ['foo'])
-  call setreg('', ['bar'], 'l')
-  normal V3p
+  call setline(1, ['txt'])
+  call setreg('', ['Nadim'], 'l')
+  normal! V
+  normal 3p
   call g:assert.equals(getline(1, '$'), [
-        \   'bar',
-        \   'bar',
-        \   'bar',
+        \   'Nadim',
+        \   'Nadim',
+        \   'Nadim',
         \ ])
   sleep 1m
-  call g:assert.equals(GetHighlightedPositionList(), [[1], [2], [3]])
-  call g:assert.equals(getreg('', 1, 1), ['foo'])
+  call g:assert.equals(GetHighlightedPositionList(), [
+        \   [1],
+        \   [2],
+        \   [3],
+        \ ])
+  call g:assert.equals(getreg('', 1, 1), ['txt'])
   call g:assert.equals(getregtype(''), 'V')
 endfunction
 
 
 function s:suite.block()
-  call setline('.', [
-        \   'foo',
-        \   'foo',
-        \   'foo',
+  call setline(1, [
+        \   'txt',
+        \   'txt',
+        \   'txt',
         \ ])
-  call setreg('', ['bar', 'bar', 'bar'], 'b')
-  execute "normal \<C-v>Ge3p"
+  call setreg('', [
+        \   'Nadim',
+        \   'Nadim',
+        \   'Nadim',
+        \ ], 'b')
+  execute "normal! \<C-v>Ge"
+  normal 3p
   call g:assert.equals(getline(1, '$'), [
-        \   'barbarbar',
-        \   'barbarbar',
-        \   'barbarbar',
+        \   'NadimNadimNadim',
+        \   'NadimNadimNadim',
+        \   'NadimNadimNadim',
         \ ])
   sleep 1m
   call g:assert.equals(GetHighlightedPositionList(), [
-        \   [1, 1, 9],
-        \   [2, 1, 9],
-        \   [3, 1, 9],
+        \   [1, 1, 15],
+        \   [2, 1, 15],
+        \   [3, 1, 15],
         \ ])
-  call g:assert.equals(getreg('', 1, 1), ['foo', 'foo', 'foo'])
+  call g:assert.equals(getreg('', 1, 1), [
+        \   'txt',
+        \   'txt',
+        \   'txt',
+        \ ])
   call g:assert.equals(getregtype(''), "\<C-v>3")
 endfunction
 
 
 function s:suite.dot_repeat_char()
-  call setline('.', ['foo'])
-  call setreg('', ['bar'], 'c')
-  normal viw3p
-  call g:assert.equals(getline(1, '$'), ['barbarbar'])
+  call setline(1, ['txt'])
+  call setreg('', ['Nadim'], 'c')
+  normal! viw
+  normal p
+  call g:assert.equals(getline(1, '$'), ['Nadim'])
   % bwipeout!
-  call setline('.', 'bazqux')
+  call setline(1, 'version')
   normal! .
-  call g:assert.equals(getline(1, '$'), ['qux'])
+  call g:assert.equals(getline(1, '$'), ['sion'])
+  sleep 1m
+  call g:assert.equals(GetHighlightedPositionList(), [])
+  call g:assert.equals(getreg('', 1, 1), ['ver'])
+  call g:assert.equals(getregtype(''), 'v')
 endfunction
 
 
 
 function s:suite.dot_repeat_line()
-  call setline('.', ['foo', 'foo'])
-  call setreg('', ['bar'], 'l')
-  normal Vj3p
+  call setline(1, [
+        \   'txt',
+        \   'txt',
+        \   'txt',
+        \ ])
+  call setreg('', ['Nadim'], 'l')
+  normal! VG
+  normal p
   call g:assert.equals(getline(1, '$'), [
-        \   'bar',
-        \   'bar',
-        \   'bar',
+        \   'Nadim',
         \ ])
   % bwipeout!
-  call setline('.', ['baz', 'qux', 'quux'])
+  call setline(1, [
+        \   'version',
+        \   'version',
+        \   'version',
+        \   'version',
+        \   'version',
+        \ ])
   normal! .
-  call g:assert.equals(getline(1, '$'), ['quux'])
+  call g:assert.equals(getline(1, '$'), [
+        \   'version',
+        \   'version',
+        \ ])
+  sleep 1m
+  call g:assert.equals(GetHighlightedPositionList(), [])
+  call g:assert.equals(getreg('', 1, 1), [
+        \   'version',
+        \   'version',
+        \   'version',
+        \ ])
+  call g:assert.equals(getregtype(''), 'V')
 endfunction
 
 
 
 function s:suite.dot_repeat_block()
-  call setline('.', [
-        \   'foo',
-        \   'foo',
-        \   'foo',
+  call setline(1, [
+        \   'txt',
+        \   'txt',
+        \   'txt',
         \ ])
-  call setreg('', ['bar', 'bar', 'bar'], 'b')
-  execute "normal \<C-v>Ge3p"
+  call setreg('', [
+        \   'Nadim',
+        \   'Nadim',
+        \   'Nadim',
+        \ ], 'b')
+  execute "normal! \<C-v>Ge"
+  normal p
   call g:assert.equals(getline(1, '$'), [
-        \   'barbarbar',
-        \   'barbarbar',
-        \   'barbarbar',
+        \   'Nadim',
+        \   'Nadim',
+        \   'Nadim',
         \ ])
   % bwipeout!
-  call setline('.', [
-        \   'buzqux',
-        \   'buzqux',
-        \   'buzqux',
+  call setline(1, [
+        \   'version',
+        \   'version',
+        \   'version',
         \ ])
   normal! .
   call g:assert.equals(getline(1, '$'), [
-        \   'qux',
-        \   'qux',
-        \   'qux',
+        \   'sion',
+        \   'sion',
+        \   'sion',
         \ ])
+  sleep 1m
+  call g:assert.equals(GetHighlightedPositionList(), [])
+  call g:assert.equals(getreg('', 1, 1), [
+        \   'ver',
+        \   'ver',
+        \   'ver',
+        \ ])
+  call g:assert.equals(getregtype(''), "\<C-v>3")
 endfunction
