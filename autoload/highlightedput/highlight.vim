@@ -117,7 +117,7 @@ endfunction
 
 function s:matchdelete_all(matchIDs, ...) abort
   let winid = get(a:000, 0, win_getid())
-  return map(copy(a:matchIDs), { _, matchID -> matchdelete(matchID, winid) })
+  return map(copy(a:matchIDs), { _, matchID -> execute(printf('call matchdelete(%d, %d)', matchID, winid), 'silent!') })
 endfunction
 
 
