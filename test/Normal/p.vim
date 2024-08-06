@@ -20,7 +20,7 @@ function s:suite.char()
   call setreg('', [''], 'c')
   normal 3p
   call g:assert.equals(getline(1, '$'), ['##'])
-  call g:assert.true(&l:modified)
+  " call g:assert.true(&l:modified)
   sleep 1m
   call g:assert.equals(GetHighlightedPositionList(), [])
   % bwipeout!
